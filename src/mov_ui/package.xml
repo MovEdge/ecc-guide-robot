@@ -14,7 +14,9 @@
 
   <depend>rclpy</depend>
   <depend>std_msgs</depend>
-  
+  <depend>mov_interfaces</depend>
+  <depend>python3-pyqt5</depend>
+
   <export>
     <build_type>ament_python</build_type>
   </export>
