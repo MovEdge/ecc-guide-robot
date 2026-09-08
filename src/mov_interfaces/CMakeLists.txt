@@ -27,6 +27,9 @@ find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/SttResult.msg"
+  "msg/DestResult.msg"
+  "msg/NavResult.msg"
+  "msg/DestChoices.msg"
 )
 
 
