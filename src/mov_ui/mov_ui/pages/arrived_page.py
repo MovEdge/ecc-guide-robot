@@ -60,14 +60,14 @@ class ArrivedPage(QWidget):
 
         home_button = QPushButton(i18n.t('arrived.home'))
         home_button.setProperty('type', 'secondary')
-        home_button.setFixedHeight(76)
+        home_button.setFixedHeight(98)
         home_button.setMinimumWidth(240)
         home_button.clicked.connect(on_home_clicked)
         button_row.addWidget(home_button)
 
         new_destination_button = QPushButton(i18n.t('arrived.new_destination'))
         new_destination_button.setProperty('type', 'confirm')
-        new_destination_button.setFixedHeight(76)
+        new_destination_button.setFixedHeight(98)
         new_destination_button.setMinimumWidth(240)
         new_destination_button.clicked.connect(on_new_destination_clicked)
         apply_shadow(new_destination_button, blur=26, color=(93, 138, 58, 100), offset=(0, 6))

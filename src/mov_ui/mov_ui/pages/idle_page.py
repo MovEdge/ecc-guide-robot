@@ -70,8 +70,8 @@ class IdlePage(QWidget):
 
         right.addSpacing(20)
 
-        speak_button = QPushButton(f"🎤   {i18n.t('idle.speak_button')}")
-        speak_button.setFixedSize(360, 92)
+        speak_button = QPushButton(i18n.t('idle.speak_button'))
+        speak_button.setFixedSize(345, 112)
         speak_button.clicked.connect(on_speak_clicked)
         apply_shadow(speak_button, blur=30, color=(96, 104, 178, 110), offset=(0, 8))
         right.addWidget(speak_button)
@@ -83,5 +83,5 @@ class IdlePage(QWidget):
             eyebrow.setText(i18n.t('app.name')),
             title.setText(i18n.t('idle.title')),
             subtitle.setText(i18n.t('idle.subtitle')),
-            speak_button.setText(f"🎤   {i18n.t('idle.speak_button')}"),
+            speak_button.setText(i18n.t('idle.speak_button')),
         ))

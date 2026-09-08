@@ -1,8 +1,10 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QStackedWidget, QPushButton
 
 from mov_ui.pages.idle_page import IdlePage
 from mov_ui.pages.listening_page import ListeningPage
 from mov_ui.pages.confirming_page import ConfirmingPage
+from mov_ui.pages.choosing_page import ChoosingPage
 from mov_ui.pages.navigating_page import NavigatingPage
 from mov_ui.pages.arrived_page import ArrivedPage
 from mov_ui.pages.error_page import ErrorPage
@@ -23,11 +25,18 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle('ECC Guide Robot')
         self.setFixedSize(SCREEN_W, SCREEN_H)
+        # 터치스크린 전용 키오스크 화면 — 창 테두리/타이틀바 없이 화면을
+        # 꽉 채워야 함. 프레임 제거만으론 창관리자가 여전히 원래 크기로
+        # 띄워서 옆에 데스크톱이 보이므로, main()에서 showFullScreen()도
+        # 같이 호출해야 함(이 클래스만으론 못 끝남).
+        self.setWindowFlags(self.windowFlags() | Qt.FramelessWindowHint)
 
         self.idle_page = IdlePage(callbacks['on_speak_clicked'])
-        self.listening_page = ListeningPage()
+        self.listening_page = ListeningPage(callbacks['on_listening_cancel_clicked'])
         self.confirming_page = ConfirmingPage(
             callbacks['on_confirm_clicked'], callbacks['on_retry_clicked'])
+        self.choosing_page = ChoosingPage(
+            callbacks['on_choice_clicked'], callbacks['on_retry_clicked'])
         self.navigating_page = NavigatingPage(callbacks['on_cancel_clicked'])
         self.arrived_page = ArrivedPage(
             callbacks['on_new_destination_clicked'], callbacks['on_home_clicked'])
@@ -39,6 +48,7 @@ class MainWindow(QMainWindow):
             ('IDLE', self.idle_page),
             ('LISTENING', self.listening_page),
             ('CONFIRMING', self.confirming_page),
+            ('CHOOSING', self.choosing_page),
             ('NAVIGATING', self.navigating_page),
             ('ARRIVED', self.arrived_page),
             ('ERROR', self.error_page),
@@ -51,8 +61,8 @@ class MainWindow(QMainWindow):
         # ── 언어 전환 버튼 (모든 상태 화면 위에 항상 떠 있음) ──
         self.lang_button = QPushButton(self._lang_label(), self)
         self.lang_button.setObjectName('LangToggle')
-        self.lang_button.setFixedSize(84, 40)
-        self.lang_button.move(SCREEN_W - 84 - 24, 24)
+        self.lang_button.setFixedSize(112, 52)
+        self.lang_button.move(SCREEN_W - 112 - 24, 24)
         self.lang_button.clicked.connect(self._on_lang_toggle)
         self.lang_button.raise_()
 

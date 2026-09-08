@@ -42,7 +42,7 @@ class ErrorPage(QWidget):
         layout.addStretch(1)
 
         retry_button = QPushButton(i18n.t('error.retry'))
-        retry_button.setFixedHeight(76)
+        retry_button.setFixedHeight(98)
         retry_button.clicked.connect(on_retry_clicked)
         layout.addWidget(retry_button)
 

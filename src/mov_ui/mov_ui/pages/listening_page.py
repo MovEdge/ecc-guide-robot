@@ -1,18 +1,22 @@
-from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve, QSequentialAnimationGroup
+from PyQt5.QtCore import Qt, QPropertyAnimation, QEasingCurve
 from PyQt5.QtWidgets import (
-    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QGraphicsOpacityEffect
+    QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QGraphicsOpacityEffect, QPushButton
 )
 
-from mov_ui.styles import SCREEN_W, SCREEN_H, PRIMARY, PRIMARY_SOFT_RGBA, make_blob, apply_shadow
+from mov_ui.styles import SCREEN_W, SCREEN_H, PRIMARY, PRIMARY_SOFT_RGBA, make_blob
 from mov_ui.i18n import i18n
 
 _BAR_HEIGHTS = [26, 54, 84, 54, 26]
 
 
 class ListeningPage(QWidget):
-    """LISTENING — 음성인식중. 파형 바 + 마이크가 은은하게 움직여 '듣고 있음'을 표현."""
+    """LISTENING — 음성인식중. 파형 바가 은은하게 움직여 '듣고 있음'을 표현.
 
-    def __init__(self):
+    마이크 이모지(🎙️)는 이 환경에 이모지 폰트가 없어 빈 네모로 렌더링돼서 뺐다
+    (파형 바만으로 충분히 "듣고 있음"이 전달됨).
+    """
+
+    def __init__(self, on_cancel_clicked):
         super().__init__()
         self.setObjectName('ListeningPage')
 
@@ -23,11 +27,6 @@ class ListeningPage(QWidget):
         layout.setContentsMargins(80, 60, 80, 60)
         layout.setSpacing(20)
         layout.addStretch(1)
-
-        self.mic_icon = QLabel('🎙️')
-        self.mic_icon.setObjectName('IconLabel')
-        self.mic_icon.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.mic_icon)
 
         # ── 파형 바 ──
         wave_row = QHBoxLayout()
@@ -56,22 +55,21 @@ class ListeningPage(QWidget):
         subtitle.setAlignment(Qt.AlignCenter)
         layout.addWidget(subtitle)
 
+        layout.addSpacing(28)
+
+        cancel_button = QPushButton(i18n.t('listening.cancel'))
+        cancel_button.setProperty('type', 'secondary')
+        cancel_button.setFixedHeight(90)
+        cancel_button.clicked.connect(on_cancel_clicked)
+        layout.addWidget(cancel_button)
+
         layout.addStretch(1)
 
         i18n.register(lambda: (
             title.setText(i18n.t('listening.title')),
             subtitle.setText(i18n.t('listening.subtitle')),
+            cancel_button.setText(i18n.t('listening.cancel')),
         ))
-
-        # ── 마이크 펄스 애니메이션 ──
-        self._mic_effect = QGraphicsOpacityEffect(self.mic_icon)
-        self.mic_icon.setGraphicsEffect(self._mic_effect)
-        self._mic_anim = QPropertyAnimation(self._mic_effect, b'opacity')
-        self._mic_anim.setDuration(900)
-        self._mic_anim.setStartValue(1.0)
-        self._mic_anim.setEndValue(0.35)
-        self._mic_anim.setEasingCurve(QEasingCurve.InOutSine)
-        self._mic_anim.setLoopCount(-1)
 
         # ── 파형 바 애니메이션 (각 바마다 살짝 다른 타이밍) ──
         self._bar_anims = []
@@ -88,12 +86,10 @@ class ListeningPage(QWidget):
 
     def showEvent(self, event):
         super().showEvent(event)
-        self._mic_anim.start()
         for anim in self._bar_anims:
             anim.start()
 
     def hideEvent(self, event):
         super().hideEvent(event)
-        self._mic_anim.stop()
         for anim in self._bar_anims:
             anim.stop()

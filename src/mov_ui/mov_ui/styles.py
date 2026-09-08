@@ -45,20 +45,20 @@ QWidget {{
 }}
 
 QLabel#TitleLabel {{
-    font-size: 54px;
+    font-size: 81px;
     font-weight: 800;
     color: {TEXT_DARK};
     background: transparent;
 }}
 
 QLabel#SubtitleLabel {{
-    font-size: 25px;
+    font-size: 44px;
     color: {TEXT_MUTED};
     background: transparent;
 }}
 
 QLabel#Eyebrow {{
-    font-size: 20px;
+    font-size: 40px;
     font-weight: 700;
     color: {PRIMARY};
     background: transparent;
@@ -70,7 +70,7 @@ QLabel#ResultCard {{
     border: 1px solid {BORDER};
     border-radius: 24px;
     padding: 36px;
-    font-size: 34px;
+    font-size: 65px;
     font-weight: 600;
     color: {TEXT_DARK};
 }}
@@ -79,33 +79,24 @@ QLabel#ErrorCard {{
     background-color: {DANGER_BG};
     border: 1px solid {DANGER};
     border-radius: 24px;
-    padding: 32px;
-    font-size: 27px;
+    padding: 33px;
+    font-size: 50px;
     color: {DANGER_DARK};
 }}
 
-QLabel#ProgressBadge {{
-    background-color: {PRIMARY};
-    color: white;
-    border-radius: 18px;
-    padding: 10px 26px;
-    font-size: 21px;
-    font-weight: 700;
-}}
-
 QLabel#RemainingLabel {{
-    font-size: 25px;
+    font-size: 47px;
     color: {TEXT_MUTED};
     background: transparent;
 }}
 
 QLabel#IconLabel {{
-    font-size: 84px;
+    font-size: 112px;
     background: transparent;
 }}
 
 QLabel#RouteEmoji {{
-    font-size: 36px;
+    font-size: 60px;
     background: transparent;
 }}
 
@@ -129,8 +120,8 @@ QPushButton#LangToggle {{
     color: white;
     border: none;
     border-radius: 18px;
-    padding: 8px 18px;
-    font-size: 16px;
+    padding: 9px 16px;
+    font-size: 24px;
     font-weight: 700;
 }}
 QPushButton#LangToggle:hover {{
@@ -144,8 +135,8 @@ QPushButton {{
     color: white;
     border: none;
     border-radius: 20px;
-    padding: 22px 36px;
-    font-size: 26px;
+    padding: 15px 27px;
+    font-size: 40px;
     font-weight: 700;
 }}
 QPushButton:hover {{

@@ -48,13 +48,13 @@ class ConfirmingPage(QWidget):
 
         retry_button = QPushButton(i18n.t('confirming.retry'))
         retry_button.setProperty('type', 'secondary')
-        retry_button.setFixedHeight(76)
+        retry_button.setFixedHeight(98)
         retry_button.clicked.connect(on_retry_clicked)
         button_row.addWidget(retry_button)
 
         confirm_button = QPushButton(i18n.t('confirming.confirm'))
         confirm_button.setProperty('type', 'confirm')
-        confirm_button.setFixedHeight(76)
+        confirm_button.setFixedHeight(98)
         confirm_button.clicked.connect(on_confirm_clicked)
         apply_shadow(confirm_button, blur=26, color=(93, 138, 58, 100), offset=(0, 6))
         button_row.addWidget(confirm_button)
@@ -70,3 +70,14 @@ class ConfirmingPage(QWidget):
 
     def set_text(self, text):
         self.result_label.setText(f'"{text}"')
+
+        # 문장이 길수록 줄바꿈이 늘어나 화면(고정 800px 높이) 밖으로
+        # 넘칠 수 있어서, 글자 수에 따라 폰트 크기를 단계적으로 줄인다.
+        length = len(text)
+        if length <= 12:
+            size = 65
+        elif length <= 24:
+            size = 48
+        else:
+            size = 36
+        self.result_label.setStyleSheet(f'font-size: {size}px;')
