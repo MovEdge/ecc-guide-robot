@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mov_ui Screen Capture</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+  :root {
+    --bg: #F7F7FA;
+    --surface: #FFFFFF;
+    --surface-sunken: #EEEEF5;
+    --border: #E7E7F0;
+    --text: #2E2E38;
+    --text-muted: #6B6B76;
+    --primary: #6068B2;
+    --primary-dark: #4B5399;
+    --primary-soft: #E5E6F5;
+    --leaf: #5D8A3A;
+    --leaf-soft: #EEF4E3;
+    --danger: #D64550;
+    --danger-soft: #FBE9EA;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --display: 'Manrope', 'Pretendard', sans-serif;
+    --body-font: 'Inter', 'Pretendard', sans-serif;
+    color-scheme: light dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #17181F;
+      --surface: #1F212B;
+      --surface-sunken: #262835;
+      --border: #31333F;
+      --text: #E9E9F1;
+      --text-muted: #9698A6;
+      --primary: #8A91D6;
+      --primary-dark: #6068B2;
+      --primary-soft: #2A2C46;
+      --leaf: #92C25E;
+      --leaf-soft: #23301C;
+      --danger: #E77A82;
+      --danger-soft: #3A2226;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body-font);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 56px 28px 80px;
+  }
+
+  header {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.15;
+    margin: 0;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
+  .lede {
+    max-width: 640px;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0;
+  }
+
+  .lede code {
+    font-family: var(--mono);
+    font-size: 0.92em;
+    background: var(--surface-sunken);
+    padding: 0.1em 0.4em;
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+  /* ── FSM flow strip ── */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .flow .node {
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: var(--surface-sunken);
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .flow .node.error { background: var(--danger-soft); color: var(--danger); }
+  .flow .arrow { color: var(--border); font-size: 13px; }
+  .flow .branch { color: var(--text-muted); font-size: 11.5px; margin: 0 2px; }
+
+  /* ── gallery grid ── */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 28px;
+    margin-top: 40px;
+  }
+
+  figure {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  figure:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -16px rgba(20, 20, 40, 0.28);
+  }
+
+  .shot-frame {
+    background: var(--surface-sunken);
+    padding: 14px;
+  }
+  .shot-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  figcaption {
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .state-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .state-label {
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--primary-soft);
+    color: var(--primary-dark);
+  }
+  .state-label.danger { background: var(--danger-soft); color: var(--danger); }
+  .state-label.leaf { background: var(--leaf-soft); color: var(--leaf); }
+
+  .lang-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 5px;
+  }
+
+  .page-name {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 16.5px;
+  }
+
+  .trigger {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-muted);
+  }
+  .trigger b {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  footer {
+    margin-top: 56px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  footer .path {
+    font-family: var(--mono);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    figure { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">mov_ui &middot; ecc-guide-robot</span>
+    <h1>7 screens, 8 captures — no ROS stack required</h1>
+    <p class="lede">
+      Each state was grabbed straight off <code>MainWindow</code> via
+      <code>QWidget.grab()</code> on the offscreen Qt platform — <code>mov_stt</code>,
+      <code>mov_dest_resolver</code> and <code>mov_fsm</code> were never started.
+      Screens that normally wait on a ROS message were filled with placeholder
+      data through the same setters <code>ui_node.py</code> calls
+      (<code>set_text</code>, <code>set_choices</code>, …). Rendered at the kiosk's
+      native 1280&times;800.
+    </p>
+    <div class="flow" aria-label="FSM state flow from INTERFACES.md">
+      <span class="node">IDLE</span>
+      <span class="arrow">&rarr;</span>
+      <span class="node">LISTENING</span>
+      <span class="arrow">&rarr;</span>
+      <span class="node">CONFIRMING</span>
+      <span class="arrow">&rarr;</span>
+      <span class="branch">1 candidate</span>
+      <span class="node">NAVIGATING</span>
+      <span class="arrow">&rarr;</span>
+      <span class="node">ARRIVED</span>
+      <span class="arrow">&rarr;</span>
+      <span class="node">IDLE</span>
+      <span class="branch">&nbsp;/&nbsp;&ge;2 candidates&nbsp;&rarr;</span>
+      <span class="node">CHOOSING</span>
+      <span class="branch">/ failure&nbsp;&rarr;</span>
+      <span class="node error">ERROR</span>
+    </div>
+  </header>
+
+  <section class="grid" id="grid"></section>
+
+  <footer>
+    <span>ECC Guide Robot &middot; Team MovEdge &middot; package <span class="path">mov_ui</span></span>
+    <span>captured 2026-09-03 &middot; regenerate: <span class="path">docs/ui_screens/capture_ui.py</span></span>
+  </footer>
+</div>
+
+<script>
+  const shots = [
+    { file: '1_idle.png', state: 'IDLE', name: '대기 (Idle)', tone: 'primary',
+      trigger: 'Default boot screen — no dummy data needed.' },
+    { file: '2_listening.png', state: 'LISTENING', name: '듣는 중 (Listening)', tone: 'primary',
+      trigger: 'Waveform bars mid-animation, single frame grabbed.' },
+    { file: '3_confirming.png', state: 'CONFIRMING', name: '확인 (Confirming)', tone: 'primary',
+      trigger: '<b>set_text()</b> fed "카페 가는 길 알려줘" as a stand-in STT result.' },
+    { file: '4_choosing.png', state: 'CHOOSING', name: '후보 선택 (Choosing)', tone: 'leaf',
+      trigger: '<b>set_choices()</b> fed category "카페" with the 3 actual cafés from landmarks.csv: 1847 카페, 뚜레쥬르, 스타벅스(썬큰가든).' },
+    { file: '5_navigating.png', state: 'NAVIGATING', name: '주행 중 (Navigating)', tone: 'primary',
+      trigger: '<b>set_destination/set_progress_percent()</b> fed "1847 카페" (as if picked from the choices above) at 42% progress.' },
+    { file: '6_arrived.png', state: 'ARRIVED', name: '도착 (Arrived)', tone: 'leaf',
+      trigger: 'Default arrival copy — no dummy data needed.' },
+    { file: '7_error.png', state: 'ERROR', name: '오류 (Error)', tone: 'danger',
+      trigger: '<b>set_message()</b> fed a "장소를 찾을 수 없어요" placeholder error.' },
+    { file: '8_idle_en.png', state: 'IDLE', name: 'Idle — English', tone: 'primary', lang: 'EN',
+      trigger: 'Same IDLE state after the language-toggle button was fired.' },
+  ];
+
+  const grid = document.getElementById('grid');
+  for (const s of shots) {
+    const fig = document.createElement('figure');
+    fig.innerHTML = `
+      <div class="shot-frame">
+        <img src="./${s.file}" alt="mov_ui ${s.state} screen" loading="lazy" />
+      </div>
+      <figcaption>
+        <div class="state-row">
+          <span class="state-label ${s.tone}">${s.state}</span>
+          ${s.lang ? `<span class="lang-tag">${s.lang}</span>` : ''}
+        </div>
+        <span class="page-name">${s.name}</span>
+        <span class="trigger">${s.trigger}</span>
+      </figcaption>`;
+    grid.appendChild(fig);
+  }
+</script>
+</body>
+</html>
