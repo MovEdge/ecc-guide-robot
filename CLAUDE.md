@@ -10,6 +10,7 @@ ECC 실내 음성 안내 자율주행 로봇. ROS 2 Humble / Ubuntu 22.04 / Turt
 - [docs/TEAM.md](docs/TEAM.md) — 팀원별 담당 파트, 패키지 소유권
 - [docs/GIT_WORKFLOW.md](docs/GIT_WORKFLOW.md) — 브랜치/커밋/PR 규칙
 - [docs/PROMPTING_GUIDE.md](docs/PROMPTING_GUIDE.md) — Phase별 Claude Code 프롬프트 예시
+- [docs/GAZEBO.md](docs/GAZEBO.md) — Ignition Gazebo 시뮬레이터 구축/실행 방법, 디버깅 기록
 
 패키지가 생성되면 [docs/templates/PACKAGE_CLAUDE_TEMPLATE.md](docs/templates/PACKAGE_CLAUDE_TEMPLATE.md)를 `src/<패키지명>/CLAUDE.md`로 복사해 채운다 (담당자·로컬 인터페이스·현재 상태). 그 폴더에서 작업할 때는 이 루트 문서와 함께 자동으로 로드된다.
 
